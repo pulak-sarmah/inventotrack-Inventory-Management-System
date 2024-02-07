@@ -45,16 +45,17 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
   const accessToken = await generateAccessTokens(user._id);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: true,
-  };
-
   const { _id, name, email, photo, phone, bio, createdAt, updatedAt } = user;
 
   res
     .status(201)
-    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("accessToken", accessToken, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      sameSite: "none",
+      secure: true,
+    })
     .json(
       new ApiResponse(
         201,
