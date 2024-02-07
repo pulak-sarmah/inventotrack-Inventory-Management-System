@@ -22,3 +22,17 @@ export const registerSchema = z.object({
     .min(2, "firstName must be at least 2 characters")
     .max(20),
 });
+
+export const loginSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email(),
+  oldPassword: z
+    .string({
+      required_error: "Password is required",
+    })
+    .min(6, "Password must be at least 6 characters")
+    .max(32),
+});
