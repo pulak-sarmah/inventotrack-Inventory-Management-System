@@ -1,9 +1,14 @@
-import { Request, Response } from "express";
+import { Request as ExpressRequest, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { loginSchema, registerSchema } from "../validations/userSchemas";
 import { ApiError } from "../utils/ApiError";
 import { User } from "../models/users.model";
 import { ApiResponse } from "../utils/ApiResponse";
+import { UserPayload } from "../../types";
+
+interface Request extends ExpressRequest {
+  user?: UserPayload;
+}
 
 const generateAccessTokens = async (userId: string) => {
   try {
@@ -108,4 +113,27 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     );
 });
 
-export { registerUser, loginUser };
+const logoutUser = asyncHandler(async (req: Request, res: Response) => {
+  res
+    .status(200)
+    .clearCookie("accessToken", {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      expires: new Date(0),
+    })
+    .json(new ApiResponse(200, null, "User logged out successfully"));
+});
+
+const getUser = asyncHandler(async (req: Request, res: Response) => {
+  const user = await User.findById(req.user?._id).select("-password");
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  res.status(200).json(new ApiResponse(200, user, "User fetched successfully"));
+});
+
+export { registerUser, loginUser, logoutUser, getUser };
