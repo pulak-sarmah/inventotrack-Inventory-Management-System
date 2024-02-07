@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
   _id: string;
@@ -8,7 +9,9 @@ export interface IUser extends Document {
   photo: string;
   phone: string;
   bio: string;
-  // isPasswordCorrect(password: string): Promise<boolean>;
+  createdAt: Date;
+  updatedAt: Date;
+  isPasswordCorrect(password: string): Promise<boolean>;
   // generateAccessToken(): string;
   // generateRefreshToken(): string;
 }
@@ -33,7 +36,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter your password"],
       minlength: [6, "Password must be at least 6 characters long"],
-      maxlength: [32, "Password must be at most 32 characters long"],
+      maxlength: [90, "Password must be at most 32 characters long"],
     },
 
     photo: {
@@ -52,5 +55,15 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+userSchema.methods.isPasswordCorrect = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
 
 export const User = mongoose.model<IUser>("User", userSchema);

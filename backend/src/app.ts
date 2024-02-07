@@ -18,10 +18,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 //import routes
-// import userRouter from "./routes/users.routes";
+import userRouter from "./routes/user.route";
 
 //use routes
-// app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", userRouter);
 
 //error handler
 app.use(errorHandler);
