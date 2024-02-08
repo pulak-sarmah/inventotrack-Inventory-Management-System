@@ -53,3 +53,29 @@ export const updateUserSchema = z
   .refine((data) => Object.values(data).some((value) => value !== undefined), {
     message: "At least one field must be updated",
   });
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z
+      .string({
+        required_error: "Password is required!",
+      })
+      .min(6, "Password must be at least 6 characters")
+      .max(32),
+    newPassword: z
+      .string({
+        required_error: "Password is required!!",
+      })
+      .min(6, "Password must be at least 6 characters")
+      .max(32)
+      .refine((value) => /\d/.test(value), "Password must include a number"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+  .refine((data) => data.oldPassword !== data.newPassword, {
+    message: "New password must be different from old password",
+    path: ["newPassword"],
+  });

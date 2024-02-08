@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { Request as ExpressRequest, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import {
+  changePasswordSchema,
   loginSchema,
   registerSchema,
   updateUserSchema,
@@ -220,6 +221,40 @@ const updateUser = asyncHandler(async (req: Request, res: Response) => {
   );
 });
 
+const changePassword = asyncHandler(async (req: Request, res: Response) => {
+  const inputData = changePasswordSchema.safeParse(req.body);
+
+  if (!inputData.success) {
+    throw new ApiError(400, inputData.error.issues[0].message);
+  }
+
+  const { oldPassword, newPassword } = inputData.data;
+
+  if (!req.user) {
+    throw new ApiError(401, "Unauthorized request");
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(401, "No user found");
+  }
+
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+
+  if (!isPasswordCorrect) {
+    throw new ApiError(401, "Password is incorrect");
+  }
+
+  user.password = newPassword;
+
+  await user.save({
+    validateBeforeSave: false,
+  });
+  res
+    .status(200)
+    .json(new ApiResponse(200, null, "Password changed successfully"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -227,4 +262,5 @@ export {
   getUser,
   loggedInStatus,
   updateUser,
+  changePassword,
 };

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changePassword,
   getUser,
   loggedInStatus,
   loginUser,
@@ -21,5 +22,7 @@ router.route("/user-data").get(varifyJWT, getUser);
 router
   .route("/update-user")
   .patch(varifyJWT, upload.single("photo"), updateUser);
+
+router.route("/change-password").patch(varifyJWT, changePassword);
 
 export default router;
