@@ -1,17 +1,22 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { Request as ExpressRequest, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import {
   changePasswordSchema,
+  forgotPasswordSchema,
   loginSchema,
   registerSchema,
   updateUserSchema,
+  resetPasswordSchema,
 } from "../validations/userSchemas";
 import { ApiError } from "../utils/ApiError";
 import { User } from "../models/users.model";
 import { ApiResponse } from "../utils/ApiResponse";
 import { UserPayload } from "../types";
 import { uploadOnCloudinary } from "../utils/cloudinary";
+import { Token } from "../models/token.model";
+import sendEmail from "../utils/sendEmail";
 
 interface Request extends ExpressRequest {
   user?: UserPayload;
@@ -255,6 +260,124 @@ const changePassword = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(200, null, "Password changed successfully"));
 });
 
+const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+  const inputData = forgotPasswordSchema.safeParse(req.body);
+
+  if (!inputData.success) {
+    throw new ApiError(400, inputData.error.issues[0].message);
+  }
+
+  const { email } = inputData.data;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
+  }
+
+  const token = await Token.findOne({ userId: user._id });
+
+  if (token) {
+    await token.deleteOne();
+  }
+
+  const resetToken = crypto.randomBytes(32).toString("hex") + user._id;
+
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  await new Token({
+    userId: user._id,
+    token: hashedToken,
+    createdAt: Date.now(),
+    expiredAt: Date.now() + 30 * (60 * 1000),
+  }).save();
+
+  const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+
+  const message = `<h1>Reset your password</h1> 
+  <hr/> 
+  <h2>Hello ${user.name}</h2> 
+  <p>Click the link below to reset your password</p> 
+  <p>This Link is valid for 30 mint</p> 
+  <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+
+  <p>regards...</p>
+  <p>InventoTrack Team</p>
+  `;
+
+  const subject = "Password Reset Request-InventoTrack";
+
+  const send_to = user.email;
+
+  const send_from = process.env.EMAIL_USERNAME as string;
+
+  try {
+    await sendEmail({
+      subject,
+      message,
+      send_to,
+      send_from,
+      reply_to: send_from,
+    });
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, null, "Reset link sent to email"));
+  } catch (error) {
+    throw new ApiError(500, "Email not sent");
+  }
+});
+
+const resetPassword = asyncHandler(async (req: Request, res: Response) => {
+  const inputData = resetPasswordSchema.safeParse(req.body);
+
+  if (!inputData.success) {
+    throw new ApiError(400, inputData.error.issues[0].message);
+  }
+  const { resetToken } = req.params;
+
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const userToken = await Token.findOne({
+    token: hashedToken,
+    expiredAt: { $gt: Date.now() },
+  });
+
+  if (!userToken) {
+    throw new ApiError(404, "Token is invalid or expired");
+  }
+
+  const user = await User.findOne({ _id: userToken.userId });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.password = inputData.data.newPassword;
+
+  await user.save();
+
+  const accessToken = await generateAccessTokens(user._id);
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      sameSite: "none",
+      secure: true,
+    })
+    .json(
+      new ApiResponse(200, null, "Password reset successful, please login")
+    );
+});
+
 export {
   registerUser,
   loginUser,
@@ -263,4 +386,6 @@ export {
   loggedInStatus,
   updateUser,
   changePassword,
+  forgotPassword,
+  resetPassword,
 };

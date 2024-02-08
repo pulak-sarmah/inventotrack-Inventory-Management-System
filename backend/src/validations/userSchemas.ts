@@ -79,3 +79,27 @@ export const changePasswordSchema = z
     message: "New password must be different from old password",
     path: ["newPassword"],
   });
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email(),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string({
+        required_error: "Password is required",
+      })
+      .min(6, "Password must be at least 6 characters")
+      .max(32)
+      .refine((value) => /\d/.test(value), "Password must include a number"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
