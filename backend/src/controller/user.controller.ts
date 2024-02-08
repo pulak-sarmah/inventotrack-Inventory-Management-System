@@ -1,11 +1,16 @@
 import jwt from "jsonwebtoken";
 import { Request as ExpressRequest, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
-import { loginSchema, registerSchema } from "../validations/userSchemas";
+import {
+  loginSchema,
+  registerSchema,
+  updateUserSchema,
+} from "../validations/userSchemas";
 import { ApiError } from "../utils/ApiError";
 import { User } from "../models/users.model";
 import { ApiResponse } from "../utils/ApiResponse";
 import { UserPayload } from "../types";
+import { uploadOnCloudinary } from "../utils/cloudinary";
 
 interface Request extends ExpressRequest {
   user?: UserPayload;
@@ -164,4 +169,62 @@ const loggedInStatus = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, true, "User is logged in"));
 });
 
-export { registerUser, loginUser, logoutUser, getUser, loggedInStatus };
+const updateUser = asyncHandler(async (req: Request, res: Response) => {
+  const inputData = updateUserSchema.safeParse(req.body);
+
+  if (!inputData.success) {
+    throw new ApiError(400, inputData.error.issues[0].message);
+  }
+
+  const user = await User.findById(req.user?._id);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  const { name, photo, phone, bio } = user;
+
+  let avatar;
+  const avatarLocalPath = req.file?.path;
+  if (avatarLocalPath) {
+    avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    if (!avatar) {
+      throw new ApiError(400, "Avatar upload failed");
+    }
+  }
+
+  user.name = inputData.data.name || name;
+  user.phone = inputData.data.phone || phone;
+  user.bio = inputData.data.bio || bio;
+  user.photo = avatar?.url || photo;
+
+  const updatedUser = await user.save();
+
+  if (!updatedUser) {
+    throw new ApiError(500, "User not updated");
+  }
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        photo: updatedUser.photo,
+        phone: updatedUser.phone,
+        bio: updatedUser.bio,
+      },
+      "User updated"
+    )
+  );
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUser,
+  loggedInStatus,
+  updateUser,
+};
