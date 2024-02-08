@@ -29,7 +29,7 @@ export const loginSchema = z.object({
       required_error: "Email is required",
     })
     .email(),
-  oldPassword: z
+  password: z
     .string({
       required_error: "Password is required",
     })

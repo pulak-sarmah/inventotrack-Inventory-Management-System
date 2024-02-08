@@ -83,13 +83,17 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
+  if (req.cookies?.accessToken) {
+    throw new ApiError(400, "User already logged in");
+  }
+
   const inputData = loginSchema.safeParse(req.body);
 
   if (!inputData.success) {
     throw new ApiError(400, inputData.error.issues[0].message);
   }
 
-  const { email: inputEmail, oldPassword } = inputData.data;
+  const { email: inputEmail, password } = inputData.data;
 
   const user = await User.findOne({ email: inputEmail });
 
@@ -97,7 +101,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, "Invalid email");
   }
 
-  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+  const isPasswordCorrect = await user.isPasswordCorrect(password);
 
   if (!isPasswordCorrect) {
     throw new ApiError(400, "Invalid password");
@@ -282,6 +286,7 @@ const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const resetToken = crypto.randomBytes(32).toString("hex") + user._id;
+  console.log(resetToken);
 
   const hashedToken = crypto
     .createHash("sha256")
@@ -363,16 +368,8 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
 
   await user.save();
 
-  const accessToken = await generateAccessTokens(user._id);
   res
     .status(200)
-    .cookie("accessToken", accessToken, {
-      path: "/",
-      httpOnly: true,
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      sameSite: "none",
-      secure: true,
-    })
     .json(
       new ApiResponse(200, null, "Password reset successful, please login")
     );
