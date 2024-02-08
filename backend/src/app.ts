@@ -20,9 +20,19 @@ app.use(cookieParser());
 
 //import routes
 import userRouter from "./routes/user.route";
+import { asyncHandler } from "./utils/asyncHandler";
+import { ApiResponse } from "./utils/ApiResponse";
 
 //use routes
 app.use("/api/v1/users", userRouter);
+
+//status check
+app.get(
+  "/api/v1/status",
+  asyncHandler(async (_, res) => {
+    res.status(200).json(new ApiResponse(200, true, "Server is running"));
+  })
+);
 
 //error handler
 app.use(errorHandler);

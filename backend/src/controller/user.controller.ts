@@ -1,10 +1,11 @@
+import jwt from "jsonwebtoken";
 import { Request as ExpressRequest, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { loginSchema, registerSchema } from "../validations/userSchemas";
 import { ApiError } from "../utils/ApiError";
 import { User } from "../models/users.model";
 import { ApiResponse } from "../utils/ApiResponse";
-import { UserPayload } from "../../types";
+import { UserPayload } from "../types";
 
 interface Request extends ExpressRequest {
   user?: UserPayload;
@@ -136,4 +137,31 @@ const getUser = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, user, "User fetched successfully"));
 });
 
-export { registerUser, loginUser, logoutUser, getUser };
+const loggedInStatus = asyncHandler(async (req: Request, res: Response) => {
+  const token =
+    req.cookies?.accessToken ||
+    req.header("Authorization")?.replace("Bearer ", "");
+
+  if (!token) {
+    res.status(200).json(new ApiResponse(200, false, "User not logged in"));
+  }
+
+  const secret = process.env.ACCESS_TOKEN_SECRET;
+  if (!secret) {
+    throw new ApiError(400, "access token not found");
+  }
+
+  try {
+    const decoded = jwt.verify(token, secret) as UserPayload | string;
+
+    if (typeof decoded !== "object" || !("_id" in decoded)) {
+      res.status(200).json(new ApiResponse(200, false, "User not logged in"));
+    }
+  } catch (error) {
+    res.status(200).json(new ApiResponse(200, false, "User not logged in"));
+  }
+
+  res.status(200).json(new ApiResponse(200, true, "User is logged in"));
+});
+
+export { registerUser, loginUser, logoutUser, getUser, loggedInStatus };

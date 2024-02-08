@@ -3,7 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 import jwt from "jsonwebtoken";
 import { User } from "../models/users.model";
 import { ApiError } from "../utils/ApiError";
-import { UserPayload } from "../../types";
+import { UserPayload } from "../types";
 
 interface Request extends ExpressRequest {
   user?: UserPayload;
