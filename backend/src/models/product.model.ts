@@ -22,7 +22,12 @@ const productSchema = new mongoose.Schema(
       ref: "User",
     },
     name: { type: String, required: [true, "please add a name"], trim: true },
-    sku: { type: String, required: true, default: "0000", trim: true },
+    sku: {
+      type: String,
+      required: true,
+      default: "0000",
+      trim: true,
+    },
     category: {
       type: String,
       required: [true, "please add category"],

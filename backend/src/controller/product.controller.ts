@@ -19,6 +19,12 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, inputData.error.errors[0].message);
   }
 
+  const productExists = await Product.find({ sku: inputData.data.sku });
+
+  if (productExists.length > 0) {
+    throw new ApiError(400, "Product already exists");
+  }
+
   let fileData = {};
   if (req.file) {
     const uploadedFile = await uploadOnCloudinary(req.file.path);
@@ -48,4 +54,48 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
   res.status(201).json(new ApiResponse(201, product, "Product created"));
 });
 
-export { createProduct };
+const getProducts = asyncHandler(async (req: Request, res: Response) => {
+  const product = await Product.find({
+    user: req.user?._id,
+  })
+    .sort("createdAt")
+    .populate("user", "email name");
+
+  if (product.length === 0) {
+    throw new ApiError(404, "No Product found");
+  }
+
+  res.status(200).json(new ApiResponse(200, product, "Product found"));
+});
+
+const getSingleProduct = asyncHandler(async (req: Request, res: Response) => {
+  const product = await Product.findById(req.params?.id);
+
+  if (!product) {
+    throw new ApiError(404, "No Product found");
+  }
+
+  if (product.user.toString() !== req.user?._id.toString()) {
+    throw new ApiError(403, "Unauthorized");
+  }
+
+  res.status(200).json(new ApiResponse(200, product, "Product found"));
+});
+
+const deteteProduct = asyncHandler(async (req: Request, res: Response) => {
+  const product = await Product.findById(req.params?.id);
+
+  if (!product) {
+    throw new ApiError(404, "No Product found");
+  }
+
+  if (product.user.toString() !== req.user?._id.toString()) {
+    throw new ApiError(403, "Unauthorized");
+  }
+
+  await Product.deleteOne({ _id: product._id });
+
+  res.status(200).json(new ApiResponse(200, null, "Product Deleted"));
+});
+
+export { createProduct, getProducts, getSingleProduct, deteteProduct };
