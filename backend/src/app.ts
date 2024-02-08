@@ -2,6 +2,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import errorHandler from "./middleware/errorHandler.middleware";
+import { asyncHandler } from "./utils/asyncHandler";
+import { ApiResponse } from "./utils/ApiResponse";
 
 const app = express();
 
@@ -20,11 +22,11 @@ app.use(cookieParser());
 
 //import routes
 import userRouter from "./routes/user.route";
-import { asyncHandler } from "./utils/asyncHandler";
-import { ApiResponse } from "./utils/ApiResponse";
+import productRouter from "./routes/product.route";
 
 //use routes
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/products", productRouter);
 
 //status check
 app.get(
