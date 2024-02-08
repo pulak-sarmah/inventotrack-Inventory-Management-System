@@ -35,9 +35,11 @@ const sendEmail: SendEmail = async (EmailOptions) => {
 
   transporter.sendMail(options, function (err, info) {
     if (err) {
-      console.log(err);
-    } else {
-      console.log(info);
+      // console.log(err);
+      throw new Error("Email not sent");
+    } else if (info) {
+      // console.log(info);
+      console.log("Email sent successfully");
     }
   });
 };

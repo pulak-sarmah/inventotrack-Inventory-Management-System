@@ -23,10 +23,12 @@ app.use(cookieParser());
 //import routes
 import userRouter from "./routes/user.route";
 import productRouter from "./routes/product.route";
+import contactRouter from "./routes/contact.route";
 
 //use routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
+app.use("/api/v1/contact-us", contactRouter);
 
 //status check
 app.get(
