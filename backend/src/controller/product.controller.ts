@@ -1,6 +1,9 @@
 import { Request as ExpressRequest, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
-import { productSchema } from "../validations/productSchemas";
+import {
+  productSchema,
+  productUpdateSchema,
+} from "../validations/productSchemas";
 import { Product } from "../models/product.model";
 import { UserPayload } from "../types";
 import { ApiError } from "../utils/ApiError";
@@ -98,4 +101,66 @@ const deteteProduct = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, null, "Product Deleted"));
 });
 
-export { createProduct, getProducts, getSingleProduct, deteteProduct };
+const updateProduct = asyncHandler(async (req: Request, res: Response) => {
+  const inputData = productUpdateSchema.safeParse(req.body);
+
+  if (!inputData.success) {
+    throw new ApiError(400, inputData.error.errors[0].message);
+  }
+
+  const product = await Product.findById(req.params?.id);
+
+  if (!product) {
+    throw new ApiError(404, "No Product found");
+  }
+
+  if (product.user.toString() !== req.user?._id.toString()) {
+    throw new ApiError(404, "Unauthorized");
+  }
+  console.log(req.file?.filename, inputData.data);
+
+  if (!req.file?.filename && Object.keys(inputData.data).length === 0) {
+    throw new ApiError(400, "No data to update");
+  }
+
+  let fileData = {};
+  if (req.file) {
+    const uploadedFile = await uploadOnCloudinary(req.file.path);
+
+    if (!uploadedFile) {
+      throw new ApiError(500, "Image upload failed");
+    }
+
+    fileData = {
+      fileName: uploadedFile?.original_filename,
+      filePath: uploadedFile?.url,
+      fileType: req.file.mimetype,
+      fileSize: fileSizeFormatter(req.file.size, 2),
+    };
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    { _id: req.params?.id },
+    {
+      ...inputData.data,
+      image: Object.keys(fileData).length === 0 ? product.image : fileData,
+    },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedProduct) {
+    throw new ApiError(500, "Product not updated");
+  }
+
+  res
+    .status(201)
+    .json(new ApiResponse(201, updatedProduct, "Product updated successfully"));
+});
+
+export {
+  createProduct,
+  getProducts,
+  getSingleProduct,
+  deteteProduct,
+  updateProduct,
+};

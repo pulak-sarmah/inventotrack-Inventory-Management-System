@@ -20,3 +20,11 @@ export const productSchema = z.object({
     required_error: "SKU is required",
   }),
 });
+
+export const productUpdateSchema = z.object({
+  name: z.string().optional(),
+  price: z.string().optional(),
+  description: z.string().optional(),
+  category: z.string().optional(),
+  quantity: z.string().optional(),
+});
