@@ -1,0 +1,16 @@
+.header_content {
+  transition: padding-left 0.5s ease;
+  padding-left: 7rem;
+}
+
+@media (max-width: 390px) {
+  .header_content {
+    h3 {
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 1.5rem;
+    }
+  }
+}

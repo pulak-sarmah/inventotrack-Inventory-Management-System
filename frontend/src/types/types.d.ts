@@ -18,3 +18,19 @@ export interface resetPasswordFormData {
   newPassword: string;
   confirmPassword: string;
 }
+
+import { IconType } from "react-icons";
+
+export interface ChildItem {
+  title: string;
+  path: string;
+  id: number;
+}
+
+export interface Item {
+  title: string;
+  icon: React.ReactElement<IconType>;
+  path?: string;
+  childrens?: ChildItem[];
+  id: number;
+}
