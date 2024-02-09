@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import axios from "axios";
 import Home from "./pages/Home/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -8,9 +9,15 @@ import SideBar from "./components/sideBar/SideBar";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Layout from "./layout/Layout";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+axios.defaults.withCredentials = true;
+
 function App() {
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

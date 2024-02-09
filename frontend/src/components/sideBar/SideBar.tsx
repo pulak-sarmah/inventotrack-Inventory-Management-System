@@ -4,7 +4,7 @@ import { TbCircleLetterI } from "react-icons/tb";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { menu } from "../../constants";
 import SideBarItems from "./SideBarItems";
-import useClickOutside from "../../hooks/ClickOutside";
+import useClickOutside from "../../hooks/useClickOutside";
 import { useNavigate } from "react-router-dom";
 
 interface SideBarProps {
