@@ -12,19 +12,19 @@ const Home = () => {
           <TbCircleLetterI size={35} />
         </div>
         <ul className="home-links">
+          <Link to="/register">
+            <li>Register</li>
+          </Link>
           <li>
-            <Link to="/register">Register</Link>
-          </li>
-          <li>
-            <button className="--btn --btn-primary">
-              <Link to="/login">Login</Link>
-            </button>
+            <Link to="/login">
+              <button className="--btn --btn-primary">Login</button>
+            </Link>
           </li>
 
           <li>
-            <button className="--btn --btn-primary">
-              <Link to="/dashboard">Dashboard</Link>
-            </button>
+            <Link to="/dashboard">
+              <button className="--btn --btn-primary">Dashboard</button>
+            </Link>
           </li>
         </ul>
       </nav>

@@ -104,6 +104,11 @@ section {
   min-height: 100vh;
 }
 
+.--form-error {
+  color: red;
+  font-size: 1rem;
+}
+
 /* Grid */
 .--grid-15 {
   display: grid;
