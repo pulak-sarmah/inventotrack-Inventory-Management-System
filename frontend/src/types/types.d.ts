@@ -34,3 +34,15 @@ export interface Item {
   childrens?: ChildItem[];
   id: number;
 }
+
+export interface AuthState {
+  isLoggedIn: boolean;
+  name: string;
+  user: {
+    name: string;
+    email: string;
+    phone: string;
+    bio: string;
+    photo: string;
+  };
+}
