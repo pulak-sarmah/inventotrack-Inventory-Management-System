@@ -44,6 +44,10 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, inputData.error.issues[0].message);
   }
 
+  if (req.cookies?.accessToken) {
+    throw new ApiError(400, "Someone is already logged in");
+  }
+
   const { email: inputEmail, password, name: InputName } = inputData.data;
   const userExists = await User.findOne({ email: inputEmail });
 
