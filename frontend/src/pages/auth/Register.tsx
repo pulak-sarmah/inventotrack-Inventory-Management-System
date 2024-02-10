@@ -7,6 +7,10 @@ import { RegisterFormData } from "../../types/types";
 import { useState } from "react";
 import { registerUser } from "../../services/authService";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { SET_LOGIN, SET_NAME } from "../../redux/features/authSlice";
+import Loader from "../../components/loader/Loader";
 
 const Register = () => {
   const {
@@ -17,14 +21,19 @@ const Register = () => {
     reset,
   } = useForm<RegisterFormData>();
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (formData) => {
     setIsLoading(true);
 
     try {
-      const data = await registerUser(formData);
-      console.log(data);
+      const response = await registerUser(formData);
+      dispatch(SET_LOGIN(true));
+
+      dispatch(SET_NAME(response.data.name));
       reset();
+      navigate("/dashboard");
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
@@ -34,6 +43,7 @@ const Register = () => {
 
   return (
     <div className={`container ${styles.auth}`}>
+      {isLoading && <Loader />}
       <Cards cardClass="red">
         <div className={styles.form}>
           <div className="--flex-center">
