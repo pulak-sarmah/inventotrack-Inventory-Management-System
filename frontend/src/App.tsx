@@ -17,7 +17,7 @@ axios.defaults.withCredentials = true;
 function App() {
   return (
     <Router>
-      <ToastContainer />
+      <ToastContainer style={{ fontSize: "1.5rem" }} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

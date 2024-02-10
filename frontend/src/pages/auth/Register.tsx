@@ -4,6 +4,9 @@ import styles from "./auth.module.scss";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { RegisterFormData } from "../../types/types";
+import { useState } from "react";
+import { registerUser } from "../../services/authService";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const {
@@ -11,10 +14,22 @@ const Register = () => {
     watch,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<RegisterFormData>();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (formData) => {
+    setIsLoading(true);
+
+    try {
+      const data = await registerUser(formData);
+      console.log(data);
+      reset();
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
@@ -29,6 +44,7 @@ const Register = () => {
           <form onSubmit={onSubmit}>
             <input
               type="text"
+              autoComplete="name"
               placeholder="Name"
               {...register("name", {
                 required: "this filed is required",
@@ -47,6 +63,7 @@ const Register = () => {
             )}
             <input
               type="email"
+              autoComplete="email"
               placeholder="Email"
               {...register("email", {
                 required: "this filed is required",
@@ -61,6 +78,7 @@ const Register = () => {
             )}
             <input
               type="password"
+              autoComplete="new-password"
               placeholder="Password"
               {...register("password", {
                 required: "this filed is required",
@@ -80,6 +98,7 @@ const Register = () => {
             )}
             <input
               type="password"
+              autoComplete="new-password"
               placeholder="Confirm Password"
               {...register("confirmPassword", {
                 validate: (value) => {
