@@ -4,13 +4,9 @@ import styles from "./auth.module.scss";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { RegisterFormData } from "../../types/types";
-import { useState } from "react";
-import { registerUser } from "../../services/authService";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { SET_LOGIN, SET_NAME } from "../../redux/features/authSlice";
 import Loader from "../../components/loader/Loader";
+import { useAuthSubmit } from "../../hooks/useAuthSubmit";
+import { registerUser } from "../../services/authService";
 
 const Register = () => {
   const {
@@ -20,26 +16,16 @@ const Register = () => {
     formState: { errors },
     reset,
   } = useForm<RegisterFormData>();
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const onSubmit = handleSubmit(async (formData) => {
-    setIsLoading(true);
+  const { isLoading, onSubmit } = useAuthSubmit(
+    registerUser,
+    reset,
+    "/dashboard"
+  );
 
-    try {
-      const response = await registerUser(formData);
-      dispatch(SET_LOGIN(true));
-
-      dispatch(SET_NAME(response.data.name));
-      reset();
-      navigate("/dashboard");
-    } catch (err) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
-  });
+  const onSubmitForm = (formData: RegisterFormData) => {
+    onSubmit(formData);
+  };
 
   return (
     <div className={`container ${styles.auth}`}>
@@ -51,7 +37,7 @@ const Register = () => {
           </div>
           <h2>Register</h2>
 
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmitForm)}>
             <input
               type="text"
               autoComplete="name"

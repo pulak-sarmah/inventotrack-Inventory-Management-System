@@ -4,20 +4,27 @@ import styles from "./auth.module.scss";
 import { useForm } from "react-hook-form";
 import { BiLogIn } from "react-icons/bi";
 import { LoginFormData } from "../../types/types";
+import Loader from "../../components/loader/Loader";
+import { useAuthSubmit } from "../../hooks/useAuthSubmit";
+import { loginUser } from "../../services/authService";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<LoginFormData>();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-  });
+  const { isLoading, onSubmit } = useAuthSubmit(loginUser, reset, "/dashboard");
+
+  const onSubmitForm = (formData: LoginFormData) => {
+    onSubmit(formData);
+  };
 
   return (
     <div className={`container ${styles.auth}`}>
+      {isLoading && <Loader />}
       <Cards cardClass="red">
         <div className={styles.form}>
           <div className="--flex-center">
@@ -25,7 +32,7 @@ const Login = () => {
           </div>
           <h2>Login</h2>
 
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmitForm)}>
             <input
               type="email"
               placeholder="Email"
