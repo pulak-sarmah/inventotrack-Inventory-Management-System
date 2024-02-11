@@ -6,7 +6,7 @@ export const ShowOnLogin = ({ children }: { children: ReactNode }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   if (isLoggedIn) {
-    return { children };
+    return <>{children}</>;
   }
   return null;
 };
@@ -15,7 +15,7 @@ export const ShowOnLogOut = ({ children }: { children: ReactNode }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   if (!isLoggedIn) {
-    return { children };
+    return <>{children}</>;
   }
   return null;
 };

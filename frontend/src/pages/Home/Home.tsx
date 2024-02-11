@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./home.scss";
 import { brandStats } from "../../constants";
 import heroImage from "../../assets/inv-img.png";
+import { ShowOnLogOut, ShowOnLogin } from "../../components/protect/HiddenLink";
 
 const Home = () => {
   return (
@@ -12,20 +13,25 @@ const Home = () => {
           <TbCircleLetterI size={35} />
         </div>
         <ul className="home-links">
-          <Link to="/register">
-            <li>Register</li>
-          </Link>
-          <li>
-            <Link to="/login">
-              <button className="--btn --btn-primary">Login</button>
+          <ShowOnLogOut>
+            <Link to="/register">
+              <li>Register</li>
             </Link>
-          </li>
 
-          <li>
-            <Link to="/dashboard">
-              <button className="--btn --btn-primary">Dashboard</button>
-            </Link>
-          </li>
+            <li>
+              <Link to="/login">
+                <button className="--btn --btn-primary">Login</button>
+              </Link>
+            </li>
+          </ShowOnLogOut>
+
+          <ShowOnLogin>
+            <li>
+              <Link to="/dashboard">
+                <button className="--btn --btn-primary">Dashboard</button>
+              </Link>
+            </li>
+          </ShowOnLogin>
         </ul>
       </nav>
 
