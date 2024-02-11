@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import Home from "./pages/Home/Home";
 import Login from "./pages/auth/Login";
@@ -13,14 +8,12 @@ import Reset from "./pages/auth/Reset";
 import SideBar from "./components/sideBar/SideBar";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Layout from "./layout/Layout";
-import { useSelector } from "react-redux";
-import { selectIsLoggedIn } from ".././src/redux/features/authSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { GetLoginStatus } from "./services/authService";
-import { SET_LOGIN } from ".././src/redux/features/authSlice";
+import { SET_LOGIN } from "./redux/features/auth/authSlice";
 import Loader from "./components/loader/Loader";
 import PageNotFound from "./pages/others/PageNotFound";
 import ServerMaintanence from "./pages/others/ServerMaintanence";
@@ -48,8 +41,6 @@ function App() {
     })();
   }, [dispatch]);
 
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-
   if (isLoading)
     return (
       <>
@@ -66,37 +57,19 @@ function App() {
       <Routes>
         <Route path="*" element={<PageNotFound />} />
         <Route path="/" element={<Home />} />
-        <Route
-          path="/login"
-          element={isLoggedIn ? <Navigate to="/" /> : <Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/register"
-          element={isLoggedIn ? <Navigate to="/" /> : <Register />}
-        />
-        <Route
-          path="/forgotPass"
-          element={isLoggedIn ? <Navigate to="/" /> : <ForgotPass />}
-        />
-        <Route
-          path="/reset-password/:resetToken"
-          element={isLoggedIn ? <Navigate to="/" /> : <Reset />}
-        />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgotPass" element={<ForgotPass />} />
+        <Route path="/reset-password/:resetToken" element={<Reset />} />
 
         <Route
           path={"/dashboard"}
-          element={
-            isLoggedIn ? (
-              <SideBar>
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              </SideBar>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
+          element=<SideBar>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </SideBar>
         />
       </Routes>
     </Router>
