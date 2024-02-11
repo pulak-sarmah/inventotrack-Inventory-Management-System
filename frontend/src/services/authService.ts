@@ -56,3 +56,13 @@ export const loginUser = (userData: LoginFormData) =>
     {},
     "User logged in successfully"
   );
+
+export const logOutUser = () => {
+  handleRequest(
+    "get",
+    "/api/v1/users/logout",
+    null,
+    {},
+    "User loggedOut successfully "
+  );
+};
