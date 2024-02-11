@@ -19,7 +19,7 @@ const handleRequest = async (
     | resetPasswordFormData
     | null = null,
   params: object = {},
-  successMessage: string = "Request successful"
+  successMessage?: string
 ): Promise<AxiosResponse["data"] | void> => {
   try {
     const response = await axios({
@@ -29,8 +29,10 @@ const handleRequest = async (
       params,
     });
 
-    if (response.status >= 200 && response.status < 300) {
-      toast.success(successMessage);
+    if (successMessage) {
+      if (response.status >= 200 && response.status < 300) {
+        toast.success(successMessage);
+      }
     }
 
     return response.data;
@@ -49,8 +51,8 @@ const handleRequest = async (
   }
 };
 
-export const registerUser = async (userData: RegisterFormData) =>
-  handleRequest(
+export const registerUser = async (userData: RegisterFormData) => {
+  const response = await handleRequest(
     "post",
     "/api/v1/users/register",
     userData,
@@ -58,44 +60,64 @@ export const registerUser = async (userData: RegisterFormData) =>
     "User registered successfully"
   );
 
-export const loginUser = async (userData: LoginFormData) =>
-  handleRequest(
+  return response;
+};
+
+export const loginUser = async (userData: LoginFormData) => {
+  const response = await handleRequest(
     "post",
     "/api/v1/users/login",
     userData,
     {},
     "User logged in successfully"
   );
+  return response;
+};
 
 export const logOutUser = async () => {
-  handleRequest(
+  const response = await handleRequest(
     "get",
     "/api/v1/users/logout",
     null,
     {},
     "User loggedOut successfully "
   );
+  return response;
 };
 
 export const forgotPassword = async (userData: forgotPasswordFormData) => {
-  handleRequest(
+  const response = await handleRequest(
     "post",
     "/api/v1/users/forgot-password",
     userData,
     {},
     "Password reset link sent successfully"
   );
+  return response;
 };
 
 export const resetPassword = async (
   userData: resetPasswordFormData,
   resetToken: string | undefined
 ) => {
-  handleRequest(
+  const response = await handleRequest(
     "put",
     `/api/v1/users/reset-password/${resetToken}`,
     userData,
     {},
     "Password reset successfully please login to continue"
   );
+
+  return response;
+};
+
+export const GetLoginStatus = async () => {
+  const response = await handleRequest(
+    "get",
+    "/api/v1/users/loggedIn-status",
+    null,
+    {}
+  );
+
+  return response;
 };
