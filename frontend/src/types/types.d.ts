@@ -46,3 +46,29 @@ export interface AuthState {
     photo: string;
   };
 }
+
+export interface IProduct {
+  _id: string;
+  user: string;
+  name: string;
+  sku: string;
+  category: string;
+  quantity: string;
+  price: string;
+  description: string;
+  image: Record<string, unknown>;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ProductState {
+  product: IProduct;
+  products: IProduct[];
+  isError: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string;
+  totalStoreValue: number;
+  outOfStock: number;
+  category: string[];
+}
