@@ -1,8 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
-import pageNotFound from "../../assets/pageNotFound.json";
-import Lottie from "lottie-react";
-
+import pageNotFound from "../../assets/notFound.jpg";
 const PageNotFound = () => {
   const navigate = useNavigate();
   return (
@@ -18,7 +15,11 @@ const PageNotFound = () => {
       }}
     >
       <div>
-        <Lottie animationData={pageNotFound} loop={true} />
+        <img
+          src={pageNotFound}
+          alt="page not found"
+          style={{ height: "90vh", width: "90vh" }}
+        />
       </div>
       <button className="--btn --btn-primary" onClick={() => navigate("/")}>
         Go Home

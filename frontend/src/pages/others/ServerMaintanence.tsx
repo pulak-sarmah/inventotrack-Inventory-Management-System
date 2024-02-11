@@ -1,5 +1,4 @@
-import serverError from "../../assets/ServerError.json";
-import Lottie from "lottie-react";
+import serverMaintenence from "../../assets/serverMain.jpg";
 
 const ServerMaintanence = () => {
   return (
@@ -15,7 +14,11 @@ const ServerMaintanence = () => {
       }}
     >
       <div>
-        <Lottie animationData={serverError} loop={true} />
+        <img
+          src={serverMaintenence}
+          alt="page not found"
+          style={{ height: "90vh", width: "90vh" }}
+        />
       </div>
       <div>
         <p>OH ho! Server Under maintanence</p>

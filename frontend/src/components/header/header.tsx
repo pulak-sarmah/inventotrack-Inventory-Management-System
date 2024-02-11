@@ -41,7 +41,7 @@ const Header = () => {
 
         <button
           onClick={handleLogout}
-          style={{ marginBottom: "1rem" }}
+          style={{ marginBottom: "1rem", marginRight: "1rem" }}
           className="--btn --btn-danger"
         >
           LogOut
