@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectIsLoggedIn } from "../../redux/features/authSlice";
+import { selectIsLoggedIn } from "../../redux/features/auth/authSlice";
 import { ReactNode } from "react";
 
 export const ShowOnLogin = ({ children }: { children: ReactNode }) => {

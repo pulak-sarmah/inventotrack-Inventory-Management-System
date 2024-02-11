@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { resetPassword } from "../../services/authService";
 import { useState } from "react";
 import Loader from "../../components/loader/Loader";
+import useRedirectLogInUser from "../../hooks/useRedirectLogInUser";
 
 const Reset = () => {
   const {
@@ -34,6 +35,7 @@ const Reset = () => {
       setIsLoading(false);
     }
   });
+  useRedirectLogInUser("/");
 
   return (
     <div className={`container ${styles.auth}`}>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { SET_LOGIN, SET_NAME } from "../../src/redux/features/authSlice";
+import { SET_LOGIN, SET_NAME } from "../redux/features/auth/authSlice";
 import { RegisterFormData, LoginFormData } from "../types/types";
 
 interface RegisterUserFunction {

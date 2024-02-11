@@ -7,6 +7,7 @@ import { RegisterFormData } from "../../types/types";
 import Loader from "../../components/loader/Loader";
 import { useAuthSubmit } from "../../hooks/useAuthSubmit";
 import { registerUser } from "../../services/authService";
+import useRedirectLogInUser from "../../hooks/useRedirectLogInUser";
 
 const Register = () => {
   const {
@@ -17,16 +18,13 @@ const Register = () => {
     reset,
   } = useForm<RegisterFormData>();
 
-  const { isLoading, onSubmit } = useAuthSubmit(
-    registerUser,
-    reset,
-    "/dashboard"
-  );
+  const { isLoading, onSubmit } = useAuthSubmit(registerUser, reset, "/");
 
   const onSubmitForm = (formData: RegisterFormData) => {
     onSubmit(formData);
   };
 
+  useRedirectLogInUser("/");
   return (
     <div className={`container ${styles.auth}`}>
       {isLoading && <Loader />}

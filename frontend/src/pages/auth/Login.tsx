@@ -7,6 +7,7 @@ import { LoginFormData } from "../../types/types";
 import Loader from "../../components/loader/Loader";
 import { useAuthSubmit } from "../../hooks/useAuthSubmit";
 import { loginUser } from "../../services/authService";
+import useRedirectLogInUser from "../../hooks/useRedirectLogInUser";
 
 const Login = () => {
   const {
@@ -21,6 +22,8 @@ const Login = () => {
   const onSubmitForm = (formData: LoginFormData) => {
     onSubmit(formData);
   };
+
+  useRedirectLogInUser("/");
 
   return (
     <div className={`container ${styles.auth}`}>

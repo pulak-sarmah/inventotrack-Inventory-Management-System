@@ -8,6 +8,7 @@ import { forgotPassword } from "../../services/authService";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import Loader from "../../components/loader/Loader";
+import useRedirectLogInUser from "../../hooks/useRedirectLogInUser";
 
 const ForgotPass = () => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const ForgotPass = () => {
       setIsLoading(false);
     }
   });
+
+  useRedirectLogInUser("/");
 
   return (
     <div className={`container ${styles.auth}`}>

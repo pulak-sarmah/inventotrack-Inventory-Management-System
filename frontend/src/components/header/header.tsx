@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { SET_LOGIN, selectName } from "../../redux/features/authSlice";
+import { SET_LOGIN, selectName } from "../../redux/features/auth/authSlice";
 import { logOutUser } from "../../services/authService";
 import "./header.scss";
 import { useNavigate } from "react-router-dom";
