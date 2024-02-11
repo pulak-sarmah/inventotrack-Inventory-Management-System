@@ -1,5 +1,10 @@
 import axios, { AxiosResponse, Method } from "axios";
-import { LoginFormData, RegisterFormData } from "../types/types";
+import {
+  LoginFormData,
+  RegisterFormData,
+  forgotPasswordFormData,
+  resetPasswordFormData,
+} from "../types/types";
 import { toast } from "react-toastify";
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
@@ -7,7 +12,12 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 const handleRequest = async (
   method: Method,
   url: string,
-  data: RegisterFormData | LoginFormData | null = null,
+  data:
+    | RegisterFormData
+    | LoginFormData
+    | forgotPasswordFormData
+    | resetPasswordFormData
+    | null = null,
   params: object = {},
   successMessage: string = "Request successful"
 ): Promise<AxiosResponse["data"] | void> => {
@@ -39,7 +49,7 @@ const handleRequest = async (
   }
 };
 
-export const registerUser = (userData: RegisterFormData) =>
+export const registerUser = async (userData: RegisterFormData) =>
   handleRequest(
     "post",
     "/api/v1/users/register",
@@ -48,7 +58,7 @@ export const registerUser = (userData: RegisterFormData) =>
     "User registered successfully"
   );
 
-export const loginUser = (userData: LoginFormData) =>
+export const loginUser = async (userData: LoginFormData) =>
   handleRequest(
     "post",
     "/api/v1/users/login",
@@ -57,12 +67,35 @@ export const loginUser = (userData: LoginFormData) =>
     "User logged in successfully"
   );
 
-export const logOutUser = () => {
+export const logOutUser = async () => {
   handleRequest(
     "get",
     "/api/v1/users/logout",
     null,
     {},
     "User loggedOut successfully "
+  );
+};
+
+export const forgotPassword = async (userData: forgotPasswordFormData) => {
+  handleRequest(
+    "post",
+    "/api/v1/users/forgot-password",
+    userData,
+    {},
+    "Password reset link sent successfully"
+  );
+};
+
+export const resetPassword = async (
+  userData: resetPasswordFormData,
+  resetToken: string | undefined
+) => {
+  handleRequest(
+    "put",
+    `/api/v1/users/reset-password/${resetToken}`,
+    userData,
+    {},
+    "Password reset successfully please login to continue"
   );
 };

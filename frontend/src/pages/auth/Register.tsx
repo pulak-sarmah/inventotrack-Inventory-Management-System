@@ -116,7 +116,7 @@ const Register = () => {
 
           <span className={styles.register}>
             <Link to="/">Home</Link>
-            <p>&nbsp; Already have an account? &nbsp;</p>
+            <p className="--font-1">&nbsp; Already have an account? &nbsp;</p>
             <Link to="/login">Login</Link>
           </span>
         </div>

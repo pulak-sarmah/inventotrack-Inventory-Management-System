@@ -3,21 +3,39 @@ import styles from "./auth.module.scss";
 import { useForm } from "react-hook-form";
 import { FaRegEnvelope } from "react-icons/fa";
 import { forgotPasswordFormData } from "../../types/types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { forgotPassword } from "../../services/authService";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import Loader from "../../components/loader/Loader";
 
 const ForgotPass = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<forgotPasswordFormData>();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = handleSubmit(async (data) => {
+    setIsLoading(true);
+    try {
+      forgotPassword(data);
+      reset();
+      navigate("/login");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
     <div className={`container ${styles.auth}`}>
+      {isLoading && <Loader />}
       <Cards cardClass="red">
         <div className={styles.form}>
           <div className="--flex-center">
@@ -51,6 +69,9 @@ const ForgotPass = () => {
                 <Link to="/login">-Login</Link>
               </p>
             </div>
+            <p className="--note">
+              * Didn't get any mail? Check your spam folder
+            </p>
           </form>
         </div>
       </Cards>

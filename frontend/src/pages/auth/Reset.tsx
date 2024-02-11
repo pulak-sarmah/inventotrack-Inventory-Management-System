@@ -2,8 +2,12 @@ import Cards from "../../components/cards/Cards";
 import styles from "./auth.module.scss";
 import { useForm } from "react-hook-form";
 import { MdLockReset } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { resetPasswordFormData } from "../../types/types";
+import { toast } from "react-toastify";
+import { resetPassword } from "../../services/authService";
+import { useState } from "react";
+import Loader from "../../components/loader/Loader";
 
 const Reset = () => {
   const {
@@ -12,13 +16,28 @@ const Reset = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<resetPasswordFormData>();
+  const navigate = useNavigate();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { resetToken } = useParams<{ resetToken: string }>();
+
+  const onSubmit = handleSubmit(async (formData) => {
+    setIsLoading(true);
+    try {
+      await resetPassword(formData, resetToken);
+      navigate("/login");
+      console.log(resetToken);
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
     <div className={`container ${styles.auth}`}>
+      {isLoading && <Loader />}
       <Cards cardClass="red">
         <div className={styles.form}>
           <div className="--flex-center">
