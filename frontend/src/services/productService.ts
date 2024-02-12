@@ -1,13 +1,16 @@
-import axios from "axios";
+import { ProductData } from "../types/types";
+import { handleRequest } from "./requestHandler";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
-
-const createProduct = async (productData: any) => {
-  const response = await axios.post(
-    `${API_BASE_URL}api/v1/products/create-product`,
-    productData
+const createProduct = async (productData: ProductData) => {
+  const response = await handleRequest(
+    "post",
+    "/api/v1/products/create-product",
+    productData,
+    {},
+    "Product Added Successfully"
   );
-  return response.data;
+
+  return response;
 };
 
 const productService = {

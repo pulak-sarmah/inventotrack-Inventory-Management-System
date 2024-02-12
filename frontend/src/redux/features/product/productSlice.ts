@@ -2,16 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import productService from "../../../services/productService";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { IProduct, ProductState } from "../../../types/types";
+import { IProduct, ProductData, ProductState } from "../../../types/types";
 
-// const initialState = {
-//   product: [],
-//   products: [],
-//   isError: false,
-//   isSuccess: false,
-//   isLoading: false,
-//   message: "",
-// };
+interface RootState {
+  product: ProductState;
+}
 
 interface RejectedValue {
   message: string;
@@ -27,8 +22,6 @@ const initialState: ProductState = {
     price: "",
     description: "",
     image: {},
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   products: [],
   isError: false,
@@ -41,13 +34,18 @@ const initialState: ProductState = {
 };
 
 //create new product using createAsyncThunk
-const createProduct = createAsyncThunk<
+export const createProduct = createAsyncThunk<
   IProduct,
   any,
   { rejectValue: RejectedValue }
->("products/create", async (formData: any, thunkAPI) => {
+>("products/create", async (formData: ProductData, thunkAPI) => {
   try {
-    return await productService.createProduct(formData);
+    const response = await productService.createProduct(formData);
+
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error("product upload failed");
+    }
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message =
@@ -58,6 +56,10 @@ const createProduct = createAsyncThunk<
         error.toString();
       toast.error(message);
       return thunkAPI.rejectWithValue({ message });
+    } else {
+      return thunkAPI.rejectWithValue({
+        message: "Something went wrong while adding product",
+      });
     }
   }
 });
@@ -75,22 +77,26 @@ const productSlice = createSlice({
       .addCase(createProduct.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createProduct.fulfilled, (state, action: any) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        console.log(action.payload);
-        state.products.push(action.payload);
-        toast.success("Product added successfully");
-      })
+      .addCase(
+        createProduct.fulfilled,
+        (state, action: { payload: IProduct }) => {
+          state.isLoading = false;
+          console.log(state.isLoading, "is loading from added");
+          state.isSuccess = true;
+          state.products.push(action.payload);
+        }
+      )
       .addCase(createProduct.rejected, (state, action) => {
         state.isLoading = false;
+        console.log(state.isLoading, "is loading from error");
         state.isError = true;
         state.message = action.payload?.message || "Something went wrong";
-        toast.error(action.payload?.message) || "Something went wrong";
       });
   },
 });
 
 export const { CALC_STORE_VALUE } = productSlice.actions;
+
+export const selectIsLoading = (state: RootState) => state.product.isLoading;
 
 export default productSlice.reducer;
