@@ -57,8 +57,8 @@ export interface IProduct {
   price: string;
   description: string;
   image: Record<string, unknown>;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ProductState {
@@ -71,4 +71,21 @@ export interface ProductState {
   totalStoreValue: number;
   outOfStock: number;
   category: string[];
+}
+
+export interface CreateProductFormData {
+  name: string;
+  category: string;
+  quantity: string;
+  price: string;
+}
+
+export interface ProductData {
+  name: string;
+  sku: string;
+  category: string;
+  quantity: string;
+  price: string;
+  description: string;
+  productImage: File | null;
 }
