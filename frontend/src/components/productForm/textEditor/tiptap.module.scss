@@ -1,0 +1,107 @@
+.textEditor {
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  p {
+    min-height: 20rem;
+    @media (max-width: 800px) {
+      min-height: 15rem;
+    }
+    @media (max-width: 390px) {
+      min-height: 8rem;
+    }
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+  }
+
+  code {
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  }
+
+  pre {
+    background: #0d0d0d;
+    color: #fff;
+    font-family: "JetBrainsMono", monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid rgba(#0d0d0d, 0.1);
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0d0d0d, 0.1);
+    margin: 2rem 0;
+  }
+}
+
+// ///////////////////////////////
+.textEditor {
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+
+  button {
+    font-size: 1.5rem;
+    margin: 1rem;
+    margin-right: 1.5rem;
+    outline: none;
+    border: none;
+    background: none;
+    color: rgb(70, 70, 70);
+    cursor: pointer;
+
+    @media (max-width: 780px) {
+      margin: 1rem;
+      font-size: 1.5rem;
+      margin-right: 1.5rem;
+    }
+
+    @media (max-width: 390px) {
+      margin: 0.1rem;
+      font-size: 1rem;
+      margin-right: 1.5rem;
+    }
+  }
+}
+
+.textEditor button:last-child {
+  margin-right: 7px;
+}
+
+button.is_active {
+  border-bottom: #ff0000 2px solid;
+}
