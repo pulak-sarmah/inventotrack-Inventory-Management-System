@@ -45,7 +45,7 @@ export const createProduct = createAsyncThunk<
     if (response.status < 200 || response.status >= 300) {
       throw new Error("product upload failed");
     }
-    return response;
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message =
@@ -75,7 +75,7 @@ export const getProducts = createAsyncThunk<
     if (response.status < 200 || response.status >= 300) {
       throw new Error("product upload failed");
     }
-    return response;
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message =
@@ -131,7 +131,6 @@ const productSlice = createSlice({
           state.isSuccess = true;
           state.isError = false;
           state.products = action.payload;
-          console.log(action.payload);
           state.products = action.payload;
         }
       )
