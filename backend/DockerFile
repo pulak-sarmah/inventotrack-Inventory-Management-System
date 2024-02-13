@@ -4,6 +4,7 @@ WORKDIR /build
 
 COPY package*.json .
 
+COPY src/ src/
 COPY tsconfig.json tsconfig.json
 
 RUN npm install
