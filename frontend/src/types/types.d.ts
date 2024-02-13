@@ -89,3 +89,8 @@ export interface ProductData {
   description: string;
   productImage: File | null;
 }
+
+export interface ProductListProps {
+  products: IProduct[];
+  isLoading: boolean;
+}
