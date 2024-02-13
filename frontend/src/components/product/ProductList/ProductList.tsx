@@ -4,8 +4,16 @@ import { PacLoader } from "../../loader/Loader";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { AiOutlineEye } from "react-icons/ai";
 import "./productList.scss";
+import { useState } from "react";
+import Search from "../../search/Search";
 
 const ProductList = ({ products, isLoading }: ProductListProps) => {
+  const [value, setValue] = useState("");
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
   const shortenText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {
       const shortenedText = text.substring(0, maxLength).concat("...");
@@ -25,7 +33,7 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
             <h3>Inventory Items</h3>
           </span>
           <span>
-            <h3>Search Inventory</h3>
+            <Search value={value} onSearch={handleSearch} />
           </span>
         </div>
 
