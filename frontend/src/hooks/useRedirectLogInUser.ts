@@ -6,7 +6,7 @@ import { GetLoginStatus } from "../services/authService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 
-const useRedirectLogOutUser = (path: string) => {
+const useRedirectLogInUser = (path: string) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,4 +24,4 @@ const useRedirectLogOutUser = (path: string) => {
   }, [dispatch, navigate, path]);
 };
 
-export default useRedirectLogOutUser;
+export default useRedirectLogInUser;
