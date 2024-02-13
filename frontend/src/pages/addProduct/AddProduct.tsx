@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/loader/Loader";
-import ProductForm from "../../components/productForm/ProductForm";
+import ProductForm from "../../components/product/productForm/ProductForm";
 import {
   createProduct,
   selectIsLoading,
@@ -11,6 +11,7 @@ import { AppDispatch } from "../../redux/store";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./addProduct.module.scss";
+import useRedirectLogOutUser from "../../hooks/useRedirectLogOutUser";
 
 const initialState: CreateProductFormData = {
   name: "",
@@ -80,6 +81,8 @@ const AddProduct = () => {
     setImagePreview(null);
     setDescription("");
   };
+
+  useRedirectLogOutUser("/login");
 
   return (
     <div className={styles.addProduct}>

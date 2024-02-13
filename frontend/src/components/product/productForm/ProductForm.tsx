@@ -1,8 +1,8 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 import "./productForm.scss";
-import { CreateProductFormData } from "../../types/types";
-import Cards from "../cards/Cards";
+import { CreateProductFormData } from "../../../types/types";
+import Cards from "../../cards/Cards";
 import { Tiptap } from "./textEditor/TipTap";
 
 interface ProductFormProps {
