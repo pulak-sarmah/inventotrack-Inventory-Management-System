@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ProductListProps } from "../../../types/types";
+import { IProduct, ProductListProps } from "../../../types/types";
 import { PacLoader } from "../../loader/Loader";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { AiOutlineEye } from "react-icons/ai";
@@ -12,6 +12,7 @@ import {
   selectFilteredProducts,
 } from "../../../redux/features/product/filterSlice";
 import { AppDispatch } from "../../../redux/store";
+import ReactPaginate from "react-paginate";
 
 const ProductList = ({ products, isLoading }: ProductListProps) => {
   const [value, setValue] = useState("");
@@ -32,8 +33,27 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
     return text;
   };
 
+  //Pagination
+  const [currentItems, setCurrentItems] = useState<IProduct[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 1;
+
+  useEffect(() => {
+    const endOffset = itemOffset + itemsPerPage;
+
+    setCurrentItems(filteredProduct.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(filteredProduct.length / itemsPerPage));
+  }, [itemOffset, itemsPerPage, filteredProduct]);
+
+  const handlePageClick = (data: { selected: number }) => {
+    const newOffset = (data.selected * itemsPerPage) % filteredProduct.length;
+    setItemOffset(newOffset);
+  };
+
   useEffect(() => {
     dispatch(FILTER_PRODUCTS({ products, value }));
+    setItemOffset(0);
   }, [dispatch, products, value]);
 
   return (
@@ -81,7 +101,7 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProduct.map((product, index) => {
+                {currentItems.map((product, index) => {
                   const { _id, category, name, quantity, price } = product;
                   return (
                     <tr key={_id}>
@@ -117,6 +137,20 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
             </table>
           )}
         </div>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="Next"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={pageCount}
+          previousLabel="Prev"
+          renderOnZeroPageCount={null}
+          containerClassName="pagination"
+          pageLinkClassName="page-num"
+          previousLinkClassName="page-num"
+          nextLinkClassName="page-num"
+          activeLinkClassName="activePage"
+        />
       </div>
     </div>
   );
