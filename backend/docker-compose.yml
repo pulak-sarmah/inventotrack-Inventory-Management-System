@@ -2,6 +2,7 @@ version: "3"
 services:
   app:
     build: .
+    image: inventotrack_backend:latest
     ports:
       - "7001:7001"
     env_file:
