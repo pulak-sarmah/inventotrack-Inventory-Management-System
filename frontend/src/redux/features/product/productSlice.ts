@@ -14,7 +14,11 @@ interface RejectedValue {
 const initialState: ProductState = {
   product: {
     _id: "",
-    user: "",
+    user: {
+      _id: "",
+      name: "",
+      email: "",
+    },
     name: "",
     sku: "",
     category: "",

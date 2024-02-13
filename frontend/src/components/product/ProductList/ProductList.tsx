@@ -4,11 +4,20 @@ import { PacLoader } from "../../loader/Loader";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { AiOutlineEye } from "react-icons/ai";
 import "./productList.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "../../search/Search";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FILTER_PRODUCTS,
+  selectFilteredProducts,
+} from "../../../redux/features/product/filterSlice";
+import { AppDispatch } from "../../../redux/store";
 
 const ProductList = ({ products, isLoading }: ProductListProps) => {
   const [value, setValue] = useState("");
+  const filteredProduct = useSelector(selectFilteredProducts);
+
+  const dispatch: AppDispatch = useDispatch();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -22,6 +31,10 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
     }
     return text;
   };
+
+  useEffect(() => {
+    dispatch(FILTER_PRODUCTS({ products, value }));
+  }, [dispatch, products, value]);
 
   return (
     <div className="product-list">
@@ -68,7 +81,7 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product, index) => {
+                {filteredProduct.map((product, index) => {
                   const { _id, category, name, quantity, price } = product;
                   return (
                     <tr key={_id}>

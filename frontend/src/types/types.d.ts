@@ -46,10 +46,14 @@ export interface AuthState {
     photo: string;
   };
 }
-
+export interface ProductUser {
+  _id: string;
+  name: string;
+  email: string;
+}
 export interface IProduct {
   _id: string;
-  user: string;
+  user: ProductUser;
   name: string;
   sku: string;
   category: string;
