@@ -35,6 +35,7 @@ const initialState: ProductState = {
   totalStoreValue: 0,
   outOfStock: 0,
   category: [],
+  shouldFetch: true,
 };
 
 //create new product using createAsyncThunk
@@ -92,7 +93,7 @@ export const getProducts = createAsyncThunk<
       return thunkAPI.rejectWithValue({ message });
     } else {
       return thunkAPI.rejectWithValue({
-        message: "Something went wrong while adding product",
+        message: "Something went wrong while fetching product",
       });
     }
   }
@@ -103,7 +104,29 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     CALC_STORE_VALUE(state, action) {
-      console.log(state, action);
+      const products = action.payload;
+      const array: number[] = [];
+      products.map((item: IProduct) => {
+        const { price, quantity } = item;
+        const productValue = parseInt(price) * parseInt(quantity);
+        return array.push(productValue);
+      });
+      const totalValue = array.reduce((acc, item) => acc + item, 0);
+      state.totalStoreValue = totalValue;
+    },
+
+    CALC_OUT_OF_STOCK(state, action) {
+      const products = action.payload;
+      const outOfStock = products.filter(
+        (product: IProduct) => parseInt(product.quantity) === 0
+      );
+      state.outOfStock = outOfStock.length;
+    },
+
+    TOTAL_CATEGORIES(state, action) {
+      const products = action.payload;
+      const allCategory = products.map((product: IProduct) => product.category);
+      state.category = allCategory.length;
     },
   },
   extraReducers: (builder) => {
@@ -118,6 +141,7 @@ const productSlice = createSlice({
           state.isSuccess = true;
           state.isError = false;
           state.products.push(action.payload);
+          state.shouldFetch = true;
         }
       )
       .addCase(createProduct.rejected, (state, action) => {
@@ -135,7 +159,7 @@ const productSlice = createSlice({
           state.isSuccess = true;
           state.isError = false;
           state.products = action.payload;
-          state.products = action.payload;
+          state.shouldFetch = false;
         }
       )
       .addCase(getProducts.rejected, (state, action) => {
@@ -149,6 +173,20 @@ const productSlice = createSlice({
 
 export const { CALC_STORE_VALUE } = productSlice.actions;
 
+export const { CALC_OUT_OF_STOCK } = productSlice.actions;
+
+export const { TOTAL_CATEGORIES } = productSlice.actions;
+
 export const selectIsLoading = (state: RootState) => state.product.isLoading;
+
+export const selectTotalStoreValue = (state: RootState) =>
+  state.product.totalStoreValue;
+
+export const selectOutOfStock = (state: RootState) => state.product.outOfStock;
+
+export const selectCategory = (state: RootState) => state.product.category;
+
+export const selectShouldFetch = (state: RootState) =>
+  state.product.shouldFetch;
 
 export default productSlice.reducer;
