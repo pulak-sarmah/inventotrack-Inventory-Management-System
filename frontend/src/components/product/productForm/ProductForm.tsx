@@ -104,7 +104,7 @@ const ProductForm = ({
             {...register("quantity", {
               required: "this filed is required",
               pattern: {
-                value: /^[1-9][0-9]*$/,
+                value: /^[0-9][0-9]*$/,
                 message: "quantity must contain only valid numbers",
               },
             })}

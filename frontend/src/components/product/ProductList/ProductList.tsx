@@ -13,6 +13,7 @@ import {
 } from "../../../redux/features/product/filterSlice";
 import { AppDispatch } from "../../../redux/store";
 import ReactPaginate from "react-paginate";
+import { shortenText } from "../../../utils/SortenText";
 
 const ProductList = ({ products, isLoading }: ProductListProps) => {
   const [value, setValue] = useState("");
@@ -24,20 +25,11 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
     setValue(e.target.value);
   };
 
-  const shortenText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      const shortenedText = text.substring(0, maxLength).concat("...");
-
-      return shortenedText;
-    }
-    return text;
-  };
-
   //Pagination
   const [currentItems, setCurrentItems] = useState<IProduct[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
-  const itemsPerPage = 1;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage;
