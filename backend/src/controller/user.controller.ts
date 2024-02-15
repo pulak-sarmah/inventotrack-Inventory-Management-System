@@ -162,7 +162,9 @@ const loggedInStatus = asyncHandler(async (req: Request, res: Response) => {
     req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
-    res.status(200).json(new ApiResponse(200, false, "User not logged in"));
+    return res
+      .status(200)
+      .json(new ApiResponse(200, false, "User not logged in"));
   }
 
   const secret = process.env.ACCESS_TOKEN_SECRET;
@@ -174,13 +176,17 @@ const loggedInStatus = asyncHandler(async (req: Request, res: Response) => {
     const decoded = jwt.verify(token, secret) as UserPayload | string;
 
     if (typeof decoded !== "object" || !("_id" in decoded)) {
-      res.status(200).json(new ApiResponse(200, false, "User not logged in"));
+      return res
+        .status(200)
+        .json(new ApiResponse(200, false, "User not logged in"));
     }
   } catch (error) {
-    res.status(200).json(new ApiResponse(200, false, "User not logged in"));
+    return res
+      .status(200)
+      .json(new ApiResponse(200, false, "User not logged in"));
   }
 
-  res.status(200).json(new ApiResponse(200, true, "User is logged in"));
+  return res.status(200).json(new ApiResponse(200, true, "User is logged in"));
 });
 
 const updateUser = asyncHandler(async (req: Request, res: Response) => {
