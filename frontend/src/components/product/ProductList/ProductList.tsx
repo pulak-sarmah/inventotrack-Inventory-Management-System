@@ -14,6 +14,10 @@ import {
 import { AppDispatch } from "../../../redux/store";
 import ReactPaginate from "react-paginate";
 import { shortenText } from "../../../utils/SortenText";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import "./productList.scss";
+import { deleteProduct } from "../../../redux/features/product/productSlice";
 
 const ProductList = ({ products, isLoading }: ProductListProps) => {
   const [value, setValue] = useState("");
@@ -47,6 +51,26 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
     dispatch(FILTER_PRODUCTS({ products, value }));
     setItemOffset(0);
   }, [dispatch, products, value]);
+
+  const handleDelete = async (id: string) => {
+    dispatch(deleteProduct(id));
+  };
+
+  const confirmDelete = (id: string) => {
+    confirmAlert({
+      title: "Delete Product",
+      message: "Are you sure you want to delete this product?",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => handleDelete(id),
+        },
+        {
+          label: "Cancel",
+        },
+      ],
+    });
+  };
 
   return (
     <div className="product-list">
@@ -116,10 +140,8 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
                           </Link>
                         </span>
 
-                        <span>
-                          <Link to={`/edit-product/${_id}`}>
-                            <FaTrash size={20} color={"red"} />
-                          </Link>
+                        <span onClick={() => confirmDelete(_id)}>
+                          <FaTrash size={20} color={"red"} />
                         </span>
                       </td>
                     </tr>
