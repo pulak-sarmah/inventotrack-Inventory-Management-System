@@ -1,8 +1,9 @@
+import "./infoBox.scss";
 interface InfoBoxProps {
   bgColor: string;
   title: string;
-  count: number;
-  icon: string;
+  count: string;
+  icon: JSX.Element;
 }
 
 const InfoBox = ({ bgColor, title, count, icon }: InfoBoxProps) => {
