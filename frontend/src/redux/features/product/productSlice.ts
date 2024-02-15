@@ -99,6 +99,36 @@ export const getProducts = createAsyncThunk<
   }
 });
 
+// delete a product
+export const deleteProduct = createAsyncThunk<
+  null,
+  string,
+  { rejectValue: RejectedValue }
+>("product/delete", async (id: string, thunkAPI) => {
+  try {
+    const response = await productService.deleteProduct(id);
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error("product could not be deleted");
+    }
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+      return thunkAPI.rejectWithValue({ message });
+    } else {
+      return thunkAPI.rejectWithValue({
+        message: "Something went wrong while deleting product",
+      });
+    }
+  }
+});
+
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -166,7 +196,20 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload?.message || "Something went wrong";
-        console.log(action.payload, "message");
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.shouldFetch = true;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload?.message || "Something went wrong";
       });
   },
 });
