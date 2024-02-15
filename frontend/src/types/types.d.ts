@@ -75,6 +75,7 @@ export interface ProductState {
   totalStoreValue: number;
   outOfStock: number;
   category: string[];
+  shouldFetch: boolean;
 }
 
 export interface CreateProductFormData {
