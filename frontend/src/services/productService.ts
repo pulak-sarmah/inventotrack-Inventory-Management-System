@@ -38,10 +38,23 @@ const getProduct = async (id: string) => {
   return response;
 };
 
+//delete a product
+const deleteProduct = async (id: string) => {
+  const response = await handleRequest(
+    "delete",
+    `/api/v1/products/delete-product/${id}`,
+    null,
+    {},
+    "Product deleted Successfully"
+  );
+  return response;
+};
+
 const productService = {
   createProduct,
   getProducts,
   getProduct,
+  deleteProduct,
 };
 
 export default productService;
