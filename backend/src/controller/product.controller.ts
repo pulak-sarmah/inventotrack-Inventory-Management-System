@@ -117,7 +117,6 @@ const updateProduct = asyncHandler(async (req: Request, res: Response) => {
   if (product.user.toString() !== req.user?._id.toString()) {
     throw new ApiError(404, "Unauthorized");
   }
-  console.log(req.file?.filename, inputData.data);
 
   if (!req.file?.filename && Object.keys(inputData.data).length === 0) {
     throw new ApiError(400, "No data to update");
