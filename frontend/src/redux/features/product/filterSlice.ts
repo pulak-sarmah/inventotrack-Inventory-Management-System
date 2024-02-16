@@ -22,7 +22,6 @@ const filterSlice = createSlice({
       );
 
       state.filteredProducts = tempProduct;
-      console.log(state.filteredProducts);
     },
   },
 });
