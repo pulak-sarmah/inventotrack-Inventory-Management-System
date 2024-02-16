@@ -27,7 +27,7 @@ const getProducts = async () => {
 };
 
 //get product
-const getProduct = async (id: string) => {
+const getProduct = async (id: string | undefined) => {
   const response = await handleRequest(
     "get",
     `/api/v1/products/get-product/${id}`,

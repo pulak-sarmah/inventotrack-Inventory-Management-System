@@ -1,16 +1,16 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import productService from "../../../services/productService";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { IProduct, ProductData, ProductState } from "../../../types/types";
+import { createSlice } from "@reduxjs/toolkit";
+import { IProduct, ProductState } from "../../../types/types";
+import {
+  createProduct,
+  getProducts,
+  deleteProduct,
+  getProduct,
+} from "./productAsyncThunks";
 
 interface RootState {
   product: ProductState;
 }
 
-interface RejectedValue {
-  message: string;
-}
 const initialState: ProductState = {
   product: {
     _id: "",
@@ -38,97 +38,6 @@ const initialState: ProductState = {
   shouldFetch: true,
 };
 
-//create new product using createAsyncThunk
-export const createProduct = createAsyncThunk<
-  IProduct,
-  any,
-  { rejectValue: RejectedValue }
->("products/create", async (formData: ProductData, thunkAPI) => {
-  try {
-    const response = await productService.createProduct(formData);
-
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error("product upload failed");
-    }
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      toast.error(message);
-      return thunkAPI.rejectWithValue({ message });
-    } else {
-      return thunkAPI.rejectWithValue({
-        message: "Something went wrong while adding product",
-      });
-    }
-  }
-});
-
-//get all products using createAsyncThunk
-export const getProducts = createAsyncThunk<
-  IProduct[],
-  void,
-  { rejectValue: RejectedValue }
->("products/getAll", async (_, thunkAPI) => {
-  try {
-    const response = await productService.getProducts();
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error("product upload failed");
-    }
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      toast.error(message);
-      return thunkAPI.rejectWithValue({ message });
-    } else {
-      return thunkAPI.rejectWithValue({
-        message: "Something went wrong while fetching product",
-      });
-    }
-  }
-});
-
-// delete a product
-export const deleteProduct = createAsyncThunk<
-  null,
-  string,
-  { rejectValue: RejectedValue }
->("product/delete", async (id: string, thunkAPI) => {
-  try {
-    const response = await productService.deleteProduct(id);
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error("product could not be deleted");
-    }
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      toast.error(message);
-      return thunkAPI.rejectWithValue({ message });
-    } else {
-      return thunkAPI.rejectWithValue({
-        message: "Something went wrong while deleting product",
-      });
-    }
-  }
-});
-
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -155,8 +64,9 @@ const productSlice = createSlice({
 
     TOTAL_CATEGORIES(state, action) {
       const products = action.payload;
-      const allCategory = products.map((product: IProduct) => product.category);
-      state.category = allCategory.length;
+      const Category = products.map((product: IProduct) => product.category);
+      const allCategory = [...new Set(Category)];
+      state.category = allCategory as string[];
     },
   },
   extraReducers: (builder) => {
@@ -196,6 +106,7 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload?.message || "Something went wrong";
+        state.shouldFetch = false;
       })
       .addCase(deleteProduct.pending, (state) => {
         state.isLoading = true;
@@ -207,6 +118,20 @@ const productSlice = createSlice({
         state.shouldFetch = true;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload?.message || "Something went wrong";
+      })
+      .addCase(getProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getProduct.fulfilled, (state, action: { payload: IProduct }) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.product = action.payload;
+      })
+      .addCase(getProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload?.message || "Something went wrong";
