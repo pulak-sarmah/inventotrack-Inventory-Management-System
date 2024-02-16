@@ -123,3 +123,32 @@ export const getProduct = createAsyncThunk<
     }
   }
 });
+
+//update a product
+export const updateProduct = createAsyncThunk<
+  IProduct,
+  { id: string; productData: any },
+  { rejectValue: RejectedValue }
+>("product/updateProductById", async ({ id, productData }, thunkAPI) => {
+  try {
+    const response = await productService.updateProduct(id, productData);
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error("product could not be updated");
+    }
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue({ message });
+    } else {
+      return thunkAPI.rejectWithValue({
+        message: "Something went wrong while updating product",
+      });
+    }
+  }
+});

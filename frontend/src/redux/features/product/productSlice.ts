@@ -5,6 +5,7 @@ import {
   getProducts,
   deleteProduct,
   getProduct,
+  updateProduct,
 } from "./productAsyncThunks";
 
 interface RootState {
@@ -135,6 +136,20 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload?.message || "Something went wrong";
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.shouldFetch = true;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload?.message || "Something went wrong";
       });
   },
 });
@@ -146,6 +161,8 @@ export const { CALC_OUT_OF_STOCK } = productSlice.actions;
 export const { TOTAL_CATEGORIES } = productSlice.actions;
 
 export const selectIsLoading = (state: RootState) => state.product.isLoading;
+
+export const selectProduct = (state: RootState) => state.product.product;
 
 export const selectTotalStoreValue = (state: RootState) =>
   state.product.totalStoreValue;

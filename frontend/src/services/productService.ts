@@ -38,6 +38,18 @@ const getProduct = async (id: string | undefined) => {
   return response;
 };
 
+//update product
+export const updateProduct = async (id: string, productData: any) => {
+  const response = await handleRequest(
+    "patch",
+    `/api/v1/products/update-product/${id}`,
+    productData,
+    {},
+    "Product updated Successfully"
+  );
+  return response;
+};
+
 //delete a product
 const deleteProduct = async (id: string) => {
   const response = await handleRequest(
@@ -55,6 +67,7 @@ const productService = {
   getProducts,
   getProduct,
   deleteProduct,
+  updateProduct,
 };
 
 export default productService;
