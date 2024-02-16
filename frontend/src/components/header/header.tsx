@@ -16,10 +16,12 @@ const Header = () => {
   const handleLogout = async () => {
     setIsLoading(true);
     try {
-      await logOutUser();
-      localStorage.removeItem("name");
-      dispatch(SET_LOGIN(false));
-      navigate("/login");
+      const response = await logOutUser();
+      if (response.statusCode === 200) {
+        localStorage.removeItem("name");
+        dispatch(SET_LOGIN(false));
+        navigate("/login");
+      }
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
