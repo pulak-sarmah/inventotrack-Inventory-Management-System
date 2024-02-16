@@ -8,8 +8,8 @@ import { Tiptap } from "./textEditor/TipTap";
 interface ProductFormProps {
   register: UseFormRegister<CreateProductFormData>;
   errors: FieldErrors<CreateProductFormData>;
-  productImage?: File | null;
-  imagePreview: string | null;
+  productImage?: File | null | string;
+  imagePreview?: string | null | File;
   description: string;
   setDescription: (description: string) => void;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,7 +20,7 @@ const ProductForm = ({
   register,
   errors,
   imagePreview,
-  // description,
+  description,
   setDescription,
   handleImageChange,
   onSubmit,
@@ -39,7 +39,7 @@ const ProductForm = ({
             />
             {imagePreview !== null ? (
               <div className="image-preview">
-                <img src={imagePreview} alt="Product" />
+                <img src={imagePreview as string} alt="Product" />
               </div>
             ) : (
               <p>No Image set for this product</p>
@@ -116,7 +116,7 @@ const ProductForm = ({
           <label>Product Description:</label>
 
           <div className="ProseMirror">
-            <Tiptap setDescription={setDescription} />
+            <Tiptap setDescription={setDescription} description={description} />
           </div>
 
           <div className="--my">
