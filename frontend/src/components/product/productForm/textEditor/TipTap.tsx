@@ -14,6 +14,7 @@ import {
   FaUndo,
 } from "react-icons/fa";
 import styles from "./tiptap.module.scss";
+import { useEffect } from "react";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -113,18 +114,32 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
 export const Tiptap = ({
   setDescription,
+  description,
 }: {
   setDescription: (description: string) => void;
+  description: string;
 }) => {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
-    content: ``,
+    content: description,
 
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       setDescription(html);
     },
+
+    onCreate: ({ editor }) => {
+      if (description) {
+        editor.commands.setContent(description);
+      }
+    },
   });
+
+  useEffect(() => {
+    if (editor && editor.getHTML() !== description) {
+      editor.commands.setContent(description);
+    }
+  }, [editor, description]);
 
   return (
     <div className={styles.textEditor}>
