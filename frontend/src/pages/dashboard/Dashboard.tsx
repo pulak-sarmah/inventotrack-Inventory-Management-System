@@ -2,13 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import useRedirectLogOutUser from "../../hooks/useRedirectLogOutUser";
 import { selectIsLoggedIn } from "../../redux/features/auth/authSlice";
 import { useEffect } from "react";
-import {
-  getProducts,
-  selectShouldFetch,
-} from "../../redux/features/product/productSlice";
+import { selectShouldFetch } from "../../redux/features/product/productSlice";
 import ProductList from "../../components/product/ProductList/ProductList";
 import { AppDispatch, RootState } from "../../redux/store";
 import ProductSummary from "../../components/product/productSummary/ProductSummary";
+import { getProducts } from "../../redux/features/product/productAsyncThunks";
 
 const Dashboard = () => {
   useRedirectLogOutUser("/login");
