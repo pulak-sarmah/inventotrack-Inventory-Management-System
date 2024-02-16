@@ -2,16 +2,14 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/loader/Loader";
 import ProductForm from "../../components/product/productForm/ProductForm";
-import {
-  createProduct,
-  selectIsLoading,
-} from "../../redux/features/product/productSlice";
+import { selectIsLoading } from "../../redux/features/product/productSlice";
 import { CreateProductFormData } from "../../types/types";
 import { AppDispatch } from "../../redux/store";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./addProduct.module.scss";
 import useRedirectLogOutUser from "../../hooks/useRedirectLogOutUser";
+import { createProduct } from "../../redux/features/product/productAsyncThunks";
 
 const initialState: CreateProductFormData = {
   name: "",
