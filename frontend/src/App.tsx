@@ -18,6 +18,7 @@ import Loader from "./components/loader/Loader";
 import PageNotFound from "./pages/others/PageNotFound";
 import ServerMaintanence from "./pages/others/ServerMaintanence";
 import AddProduct from "./pages/addProduct/AddProduct";
+import ProductDetail from "./components/product/productDetails/ProductDetail";
 
 axios.defaults.withCredentials = true;
 
@@ -78,6 +79,15 @@ function App() {
           element=<SideBar>
             <Layout>
               <AddProduct />
+            </Layout>
+          </SideBar>
+        />
+
+        <Route
+          path={"/product-detail/:id"}
+          element=<SideBar>
+            <Layout>
+              <ProductDetail />
             </Layout>
           </SideBar>
         />
