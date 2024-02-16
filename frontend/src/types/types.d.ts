@@ -60,7 +60,7 @@ export interface IProduct {
   quantity: string;
   price: string;
   description: string;
-  image: Record<string, unknown>;
+  image: Record<string | File>;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -87,7 +87,7 @@ export interface CreateProductFormData {
 
 export interface ProductData {
   name: string;
-  sku: string;
+  sku?: string;
   category: string;
   quantity: string;
   price: string;
