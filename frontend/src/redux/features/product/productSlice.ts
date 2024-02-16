@@ -149,6 +149,7 @@ const productSlice = createSlice({
       .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.shouldFetch = true;
         state.message = action.payload?.message || "Something went wrong";
       });
   },
