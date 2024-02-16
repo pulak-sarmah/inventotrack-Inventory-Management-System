@@ -127,11 +127,11 @@ export const getProduct = createAsyncThunk<
 //update a product
 export const updateProduct = createAsyncThunk<
   IProduct,
-  { id: string; productData: any },
+  { id: string; formData: any },
   { rejectValue: RejectedValue }
->("product/updateProductById", async ({ id, productData }, thunkAPI) => {
+>("product/updateProductById", async ({ id, formData }, thunkAPI) => {
   try {
-    const response = await productService.updateProduct(id, productData);
+    const response = await productService.updateProduct(id, formData);
     if (response.status < 200 || response.status >= 300) {
       throw new Error("product could not be updated");
     }
