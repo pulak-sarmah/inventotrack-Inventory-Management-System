@@ -62,7 +62,7 @@ const ProductSummary = ({ products }: { products: IProduct[] }) => {
         <InfoBox
           icon={categoryIcon}
           title={"All Categories"}
-          count={category.toString()}
+          count={category.length.toString()}
           bgColor="card4"
         />
       </div>
