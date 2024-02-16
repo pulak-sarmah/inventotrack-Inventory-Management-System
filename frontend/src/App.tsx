@@ -18,7 +18,8 @@ import Loader from "./components/loader/Loader";
 import PageNotFound from "./pages/others/PageNotFound";
 import ServerMaintanence from "./pages/others/ServerMaintanence";
 import AddProduct from "./pages/addProduct/AddProduct";
-import ProductDetail from "./components/product/productDetails/ProductDetail";
+import ProductDetail from "./pages/productDetails/ProductDetail";
+import EditProduct from "./pages/editProduct/EditProduct";
 
 axios.defaults.withCredentials = true;
 
@@ -88,6 +89,15 @@ function App() {
           element=<SideBar>
             <Layout>
               <ProductDetail />
+            </Layout>
+          </SideBar>
+        />
+
+        <Route
+          path={"/edit-product/:id"}
+          element=<SideBar>
+            <Layout>
+              <EditProduct />
             </Layout>
           </SideBar>
         />
