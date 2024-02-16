@@ -39,7 +39,7 @@ const getProduct = async (id: string | undefined) => {
 };
 
 //update product
-export const updateProduct = async (id: string, productData: any) => {
+export const updateProduct = async (id: string, productData: ProductData) => {
   const response = await handleRequest(
     "patch",
     `/api/v1/products/update-product/${id}`,
