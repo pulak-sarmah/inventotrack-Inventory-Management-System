@@ -35,7 +35,7 @@ html {
 
 body {
   font-family: var(--font-family);
-  background: #eee;
+  background: linear-gradient(to right, #e0f2fe, #e0fcff);
 }
 
 section {
@@ -216,7 +216,7 @@ p {
 
 /* Text Color */
 .--text-light {
-  color: #fff;
+  color: #fafafa;
 }
 
 .--color-primary {
@@ -230,7 +230,7 @@ p {
 }
 
 .--color-white {
-  color: #fff;
+  color: #f8fafc;
 }
 .--color-dark {
   color: #333;
