@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-import useRedirectLogOutUser from "../../../hooks/useRedirectLogOutUser";
+import useRedirectLogOutUser from "../../hooks/useRedirectLogOutUser";
 import "./productDetail.scss";
 import { useParams } from "react-router-dom";
-import { selectIsLoggedIn } from "../../../redux/features/auth/authSlice";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { selectIsLoggedIn } from "../../redux/features/auth/authSlice";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useEffect } from "react";
-import { getProduct } from "../../../redux/features/product/productAsyncThunks";
-import Cards from "../../cards/Cards";
+import { getProduct } from "../../redux/features/product/productAsyncThunks";
+import Cards from "../../components/cards/Cards";
 import DOMPurify from "dompurify";
-import { PacLoader } from "../../loader/Loader";
+import { PacLoader } from "../../components/loader/Loader";
 
 const ProductDetail = () => {
   useRedirectLogOutUser("/login");
