@@ -16,8 +16,7 @@ import ReactPaginate from "react-paginate";
 import { shortenText } from "../../../utils/SortenText";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import "./productList.scss";
-import { deleteProduct } from "../../../redux/features/product/productSlice";
+import { deleteProduct } from "../../../redux/features/product/productAsyncThunks";
 
 const ProductList = ({ products, isLoading }: ProductListProps) => {
   const [value, setValue] = useState("");
@@ -111,6 +110,7 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
                   <th>Name</th>
                   <th>Category</th>
                   <th>Price</th>
+                  <th>Sku</th>
                   <th>Quantity</th>
                   <th>Value</th>
                   <th>Action</th>
@@ -118,18 +118,19 @@ const ProductList = ({ products, isLoading }: ProductListProps) => {
               </thead>
               <tbody>
                 {currentItems.map((product, index) => {
-                  const { _id, category, name, quantity, price } = product;
+                  const { _id, category, name, quantity, price, sku } = product;
                   return (
                     <tr key={_id}>
                       <td>{index + 1}</td>
                       <td>{shortenText(name, 16)}</td>
                       <td>{category}</td>
                       <td>{`₹${" "}${price}`}</td>
+                      <td>{shortenText(sku, 8)}</td>
                       <td>{quantity}</td>
                       <td>{`₹${" "} ${Number(price) * Number(quantity)}`}</td>
                       <td className="icons">
                         <span>
-                          <Link to={`/edit-product/${_id}`}>
+                          <Link to={`/product-detail/${_id}`}>
                             <AiOutlineEye size={20} color={"purpule"} />
                           </Link>
                         </span>
