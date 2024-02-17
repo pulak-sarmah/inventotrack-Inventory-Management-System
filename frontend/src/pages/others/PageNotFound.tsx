@@ -18,7 +18,7 @@ const PageNotFound = () => {
         <img
           src={pageNotFound}
           alt="page not found"
-          style={{ height: "90vh", width: "90vh" }}
+          style={{ height: "90vh", maxWidth: "100%" }}
         />
       </div>
       <button className="--btn --btn-primary" onClick={() => navigate("/")}>

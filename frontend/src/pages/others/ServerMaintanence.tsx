@@ -17,7 +17,7 @@ const ServerMaintanence = () => {
         <img
           src={serverMaintenence}
           alt="page not found"
-          style={{ height: "90vh", width: "90vh" }}
+          style={{ height: "90vh", maxWidth: "100%" }}
         />
       </div>
       <div>
