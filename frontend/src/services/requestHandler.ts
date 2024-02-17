@@ -7,6 +7,7 @@ import {
   resetPasswordFormData,
   ProductData,
 } from "../types/types";
+import { ContactUs } from "./authService";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
@@ -19,6 +20,7 @@ export const handleRequest = async (
     | forgotPasswordFormData
     | resetPasswordFormData
     | ProductData
+    | ContactUs
     | FormData
     | null = null,
   params: object = {},
