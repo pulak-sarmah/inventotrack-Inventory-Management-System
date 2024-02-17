@@ -4,7 +4,7 @@ import Cards from "../cards/Cards";
 import { changePassword } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 
-interface ChangePasswordFormData {
+export interface ChangePasswordFormData {
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
