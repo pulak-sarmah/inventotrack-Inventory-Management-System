@@ -44,7 +44,7 @@ export const menu = [
       },
       {
         title: "Edit Profile",
-        path: "/profile-update",
+        path: "/edit-profile",
         id: 2,
       },
     ],
