@@ -19,6 +19,7 @@ export const handleRequest = async (
     | forgotPasswordFormData
     | resetPasswordFormData
     | ProductData
+    | FormData
     | null = null,
   params: object = {},
   successMessage?: string
