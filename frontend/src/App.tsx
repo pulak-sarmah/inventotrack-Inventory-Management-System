@@ -1,13 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
-import Home from "./pages/Home/Home";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import ForgotPass from "./pages/auth/ForgotPass";
-import Reset from "./pages/auth/Reset";
-import SideBar from "./components/sideBar/SideBar";
-import Dashboard from "./pages/dashboard/Dashboard";
-import Layout from "./layout/Layout";
+import { lazy, Suspense } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
@@ -15,14 +8,27 @@ import { useEffect, useState } from "react";
 import { GetLoginStatus } from "./services/authService";
 import { SET_LOGIN } from "./redux/features/auth/authSlice";
 import Loader from "./components/loader/Loader";
-import PageNotFound from "./pages/others/PageNotFound";
-import ServerMaintanence from "./pages/others/ServerMaintanence";
-import AddProduct from "./pages/addProduct/AddProduct";
-import ProductDetail from "./pages/productDetails/ProductDetail";
-import EditProduct from "./pages/editProduct/EditProduct";
-import Profile from "./pages/profile/Profile";
-import EditProfile from "./pages/profile/EditProfile";
-import Contact from "./pages/contact/Contact";
+
+const Home = lazy(() => import("./pages/Home/Home"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const ForgotPass = lazy(() => import("./pages/auth/ForgotPass"));
+const Reset = lazy(() => import("./pages/auth/Reset"));
+const SideBar = lazy(() => import("./components/sideBar/SideBar"));
+const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
+const Layout = lazy(() => import("./layout/Layout"));
+const PageNotFound = lazy(() => import("./pages/others/PageNotFound"));
+const ServerMaintanence = lazy(
+  () => import("./pages/others/ServerMaintanence")
+);
+const AddProduct = lazy(() => import("./pages/addProduct/AddProduct"));
+const ProductDetail = lazy(
+  () => import("./pages/productDetails/ProductDetail")
+);
+const EditProduct = lazy(() => import("./pages/editProduct/EditProduct"));
+const Profile = lazy(() => import("./pages/profile/Profile"));
+const EditProfile = lazy(() => import("./pages/profile/EditProfile"));
+const Contact = lazy(() => import("./pages/contact/Contact"));
 
 axios.defaults.withCredentials = true;
 
@@ -60,78 +66,80 @@ function App() {
   return (
     <Router>
       <ToastContainer style={{ fontSize: "1.5rem" }} />
-      <Routes>
-        <Route path="*" element={<PageNotFound />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
 
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgotPass" element={<ForgotPass />} />
-        <Route path="/reset-password/:resetToken" element={<Reset />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgotPass" element={<ForgotPass />} />
+          <Route path="/reset-password/:resetToken" element={<Reset />} />
 
-        <Route
-          path={"/dashboard"}
-          element=<SideBar>
-            <Layout>
-              <Dashboard />
-            </Layout>
-          </SideBar>
-        />
+          <Route
+            path={"/dashboard"}
+            element=<SideBar>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </SideBar>
+          />
 
-        <Route
-          path={"/add-product"}
-          element=<SideBar>
-            <Layout>
-              <AddProduct />
-            </Layout>
-          </SideBar>
-        />
+          <Route
+            path={"/add-product"}
+            element=<SideBar>
+              <Layout>
+                <AddProduct />
+              </Layout>
+            </SideBar>
+          />
 
-        <Route
-          path={"/product-detail/:id"}
-          element=<SideBar>
-            <Layout>
-              <ProductDetail />
-            </Layout>
-          </SideBar>
-        />
+          <Route
+            path={"/product-detail/:id"}
+            element=<SideBar>
+              <Layout>
+                <ProductDetail />
+              </Layout>
+            </SideBar>
+          />
 
-        <Route
-          path={"/edit-product/:id"}
-          element=<SideBar>
-            <Layout>
-              <EditProduct />
-            </Layout>
-          </SideBar>
-        />
+          <Route
+            path={"/edit-product/:id"}
+            element=<SideBar>
+              <Layout>
+                <EditProduct />
+              </Layout>
+            </SideBar>
+          />
 
-        <Route
-          path={"/profile"}
-          element=<SideBar>
-            <Layout>
-              <Profile />
-            </Layout>
-          </SideBar>
-        />
+          <Route
+            path={"/profile"}
+            element=<SideBar>
+              <Layout>
+                <Profile />
+              </Layout>
+            </SideBar>
+          />
 
-        <Route
-          path={"/edit-profile"}
-          element=<SideBar>
-            <Layout>
-              <EditProfile />
-            </Layout>
-          </SideBar>
-        />
+          <Route
+            path={"/edit-profile"}
+            element=<SideBar>
+              <Layout>
+                <EditProfile />
+              </Layout>
+            </SideBar>
+          />
 
-        <Route
-          path={"/contact-us"}
-          element=<SideBar>
-            <Layout>
-              <Contact />
-            </Layout>
-          </SideBar>
-        />
-      </Routes>
+          <Route
+            path={"/contact-us"}
+            element=<SideBar>
+              <Layout>
+                <Contact />
+              </Layout>
+            </SideBar>
+          />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
