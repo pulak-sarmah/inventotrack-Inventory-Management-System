@@ -3,7 +3,6 @@ import path from "path";
 import cookieParser from "cookie-parser";
 // import cors from "cors";
 import errorHandler from "./middleware/errorHandler.middleware";
-import { asyncHandler } from "./utils/asyncHandler";
 // import rateLimit from "express-rate-limit";
 
 const app = express();
@@ -30,7 +29,6 @@ app.use(express.static(path.join(__dirname, "../build")));
 import userRouter from "./routes/user.route";
 import productRouter from "./routes/product.route";
 import contactRouter from "./routes/contact.route";
-
 
 //use routes
 app.use("/api/v1/users", userRouter);

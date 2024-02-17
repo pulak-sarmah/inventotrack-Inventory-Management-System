@@ -4,7 +4,7 @@
   "description": "backend for inventotrack",
   "main": "./src/server.ts",
   "scripts": {
-    "build": "npm install && npx tsc",
+    "build": "rimraf dist && npx tsc",
     "prestart": "npm run build",
     "start": "node ./dist/server.js",
     "preserver": "npm run build",
