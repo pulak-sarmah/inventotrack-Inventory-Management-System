@@ -20,6 +20,8 @@ import ServerMaintanence from "./pages/others/ServerMaintanence";
 import AddProduct from "./pages/addProduct/AddProduct";
 import ProductDetail from "./pages/productDetails/ProductDetail";
 import EditProduct from "./pages/editProduct/EditProduct";
+import Profile from "./pages/profile/Profile";
+import EditProfile from "./pages/profile/EditProfile";
 
 axios.defaults.withCredentials = true;
 
@@ -98,6 +100,24 @@ function App() {
           element=<SideBar>
             <Layout>
               <EditProduct />
+            </Layout>
+          </SideBar>
+        />
+
+        <Route
+          path={"/profile"}
+          element=<SideBar>
+            <Layout>
+              <Profile />
+            </Layout>
+          </SideBar>
+        />
+
+        <Route
+          path={"/edit-profile"}
+          element=<SideBar>
+            <Layout>
+              <EditProfile />
             </Layout>
           </SideBar>
         />
