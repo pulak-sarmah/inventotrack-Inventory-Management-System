@@ -9,6 +9,7 @@ import Loader from "../../components/loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { updateProfileData } from "../../services/authService";
 import { toast } from "react-toastify";
+import ChangePassword from "../../components/changePassword/ChangePassword";
 
 export interface ProfileData {
   name: string;
@@ -163,7 +164,7 @@ const EditProfile = () => {
         </form>
       </Cards>
       <br />
-      {/* <ChangePassword /> */}
+      <ChangePassword />
     </div>
   );
 };
