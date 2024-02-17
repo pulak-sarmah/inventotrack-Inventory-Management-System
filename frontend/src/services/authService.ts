@@ -97,3 +97,14 @@ export const updateProfileData = async (userData: FormData) => {
   );
   return response;
 };
+
+export const changePassword = async (userData: any) => {
+  const Response = await handleRequest(
+    "patch",
+    "/api/v1/users/change-password",
+    userData,
+    {},
+    "Password changed successfully"
+  );
+  return Response;
+};
