@@ -76,3 +76,24 @@ export const GetLoginStatus = async () => {
 
   return response;
 };
+
+export const getUserProfileData = async () => {
+  const response = await handleRequest(
+    "get",
+    "/api/v1/users/user-data",
+    null,
+    {}
+  );
+  return response;
+};
+
+export const updateProfileData = async (userData: FormData) => {
+  const response = await handleRequest(
+    "patch",
+    "/api/v1/users/update-user",
+    userData,
+    {},
+    "Profile updated successfully"
+  );
+  return response;
+};
