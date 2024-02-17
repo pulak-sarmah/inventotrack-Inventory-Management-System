@@ -1,3 +1,4 @@
+import { ChangePasswordFormData } from "../components/changePassword/ChangePassword";
 import {
   LoginFormData,
   RegisterFormData,
@@ -98,7 +99,7 @@ export const updateProfileData = async (userData: FormData) => {
   return response;
 };
 
-export const changePassword = async (userData: any) => {
+export const changePassword = async (userData: ChangePasswordFormData) => {
   const Response = await handleRequest(
     "patch",
     "/api/v1/users/change-password",
@@ -107,4 +108,21 @@ export const changePassword = async (userData: any) => {
     "Password changed successfully"
   );
   return Response;
+};
+
+export interface ContactUs {
+  subject: string;
+  message: string;
+}
+
+export const contactUs = async (userData: ContactUs) => {
+  const response = await handleRequest(
+    "post",
+    "/api/v1/contact-us",
+    userData,
+    {},
+    "Message sent successfully"
+  );
+
+  return response;
 };
