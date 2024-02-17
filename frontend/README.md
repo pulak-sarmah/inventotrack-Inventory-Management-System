@@ -1,30 +1,23 @@
-# React + TypeScript + Vite
+# inventoTrack_frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+`inventoTrack_frontend` is a frontend service designed to interact with the `inventoTrack_backend` service. It's built with React.js and provides a user-friendly interface for managing and tracking inventory.
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Manual Setup
 
-## Expanding the ESLint configuration
+1. Install [Node.js](https://nodejs.org/en/download/) on your machine.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+2. Clone the repository and navigate to the root directory of the project.
 
-- Configure the top-level `parserOptions` property like this:
+3. Install the dependencies:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Usage
+
+Once the server is running, you can access the application on http://localhost:3000.
+
+The frontend service is designed to interact with the inventoTrack_backend service. Make sure the backend service is running and accessible. You can find the backend service [here](https://github.com/pulak-sarmah/inventotrack-Inventory-Management-System/tree/main/backend).
