@@ -9,7 +9,7 @@ import {
 } from "../types/types";
 import { ContactUs } from "./authService";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+const API_BASE_URL = "";
 
 export const handleRequest = async (
   method: Method,
