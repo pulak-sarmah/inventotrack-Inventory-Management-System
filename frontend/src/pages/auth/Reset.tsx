@@ -58,7 +58,8 @@ const Reset = () => {
                   message: "password must be at least 6 character long",
                 },
                 pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/,
+                  value:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/,
                   message:
                     "password must contain at least one letter,one number and one special character",
                 },
