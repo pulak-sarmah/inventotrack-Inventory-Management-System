@@ -1,4 +1,4 @@
-import { FaPhoneAlt, FaEnvelope, FaTwitter } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { GoLocation } from "react-icons/go";
 import "./contact.scss";
 import Cards from "../../components/cards/Cards";
@@ -61,7 +61,7 @@ const Contact = () => {
             <div className="icons">
               <span>
                 <FaPhoneAlt />
-                <p>070123123123</p>
+                <p>0000000000</p>
               </span>
               <span>
                 <FaEnvelope />
@@ -69,11 +69,7 @@ const Contact = () => {
               </span>
               <span>
                 <GoLocation />
-                <p>Abuja, Nigeria</p>
-              </span>
-              <span>
-                <FaTwitter />
-                <p>@ZinoTrust</p>
+                <p>pulak, India</p>
               </span>
             </div>
           </Cards>
