@@ -44,12 +44,9 @@ app.use("/api/v1/contact-us", contactRouter);
 // );
 
 // Handle unmatched routes and serve index.html file
-// app.get(
-//   "*",
-//   asyncHandler(async (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "build", "index.html"));
-//   })
-// );
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../build", "index.html"));
+});
 
 //error handler
 app.use(errorHandler);
