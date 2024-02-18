@@ -1,4 +1,4 @@
-import { FaPhoneAlt, FaEnvelope, FaTwitter } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { GoLocation } from "react-icons/go";
 import "./contact.scss";
 import Cards from "../../components/cards/Cards";
